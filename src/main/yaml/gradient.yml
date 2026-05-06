@@ -2,7 +2,7 @@ incarnation: collektive
 
 network-model:
   type: ConnectWithinDistance
-  parameters: [5]
+  parameters: [100]
 
 _pool: &program
   - time-distribution: 1
@@ -12,7 +12,27 @@ _pool: &program
         parameters: [it.unibo.collektive.examples.gradient.GradientKt.gradientEntrypoint]
 
 deployments:
-  - type: Rectangle
-    parameters: [199, 0, 0, 20, 20]
+  - type: Circle
+    parameters: [200, 0, 0, 400]
     programs:
+      - time-distribution: 1
+        type: Event
+        actions:
+          - type: BrownianMove
+            parameters: [5.0]
       - *program
+  - type: Point
+    parameters: [0, 200]
+    programs:
+      - time-distribution: 1
+        type: Event
+        actions:
+          - type: CircularMovement
+            parameters:
+              radius: 200.0
+              center: [0.0,0.0]
+              speed: 5.0
+      - *program
+    contents:
+      - molecule: source
+        concentration: true

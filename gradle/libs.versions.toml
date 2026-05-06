@@ -2,6 +2,8 @@
 kotlin = "2.3.21"
 alchemist = "43.0.40"
 collektive = "28.2.3"
+guava = "33.6.0-jre"
+apache = "3.6.1"
 
 [libraries]
 alchemist = { module = "it.unibo.alchemist:alchemist", version.ref = "alchemist" }
@@ -11,7 +13,8 @@ alchemist-euclidean-geometry = { module = "it.unibo.alchemist:alchemist-euclidea
 collektive = { module = "it.unibo.collektive:collektive-dsl", version.ref = "collektive" }
 collektive-incarnation = { module = "it.unibo.collektive:alchemist-incarnation-collektive", version.ref = "collektive" }
 collektive-stdlib = { module = "it.unibo.collektive:collektive-stdlib", version.ref = "collektive" }
-
+guava = {module = "com.google.guava:guava", version.ref = "guava" }
+apache-math = {module = "org.apache.commons:commons-math3", version.ref = "apache"}
 [bundles]
 alchemist = [
     "alchemist",

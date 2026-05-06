@@ -21,6 +21,8 @@ sourceSets {
         dependencies {
             implementation(libs.bundles.alchemist)
             implementation(libs.bundles.collektive)
+            implementation(libs.guava)
+            implementation(libs.apache.math)
         }
         resources {
             srcDir("src/main/yaml")
