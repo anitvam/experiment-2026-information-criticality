@@ -19,7 +19,7 @@ fun Aggregate<Int>.gradientEntrypoint(environment: CollektiveDevice<*>): Map<Str
         val leaderID = 200 //TODO(Take this from alchemist property)
         val maxDistanceReachedByCriticality = 150
 
-        val srd = share(criticalities) { field ->
+        val srd = share(criticalities) { _ ->
             val distance =  distanceTo(localId == leaderID, distances())
             environment["distance"] = distance
 
