@@ -9,6 +9,7 @@ import it.unibo.collektive.aggregate.values
 import it.unibo.collektive.stdlib.collapse.minBy
 import it.unibo.collektive.stdlib.spreading.distanceTo
 import it.unibo.collektive.stdlib.util.Reducer
+import javax.crypto.spec.PSource
 
 inline fun <reified ID : Any, reified Value, reified Distance: Comparable<Distance>> Aggregate<ID>.boundedBellmanFordGradientCast(
     source: Boolean,
@@ -55,8 +56,8 @@ inline fun <reified ID : Any, reified Value> Aggregate<ID>.boundedBellmanFordGra
 )
 
 fun Aggregate<Int>.gradientEntrypoint(environment: CollektiveDevice<*>): Map<String, Double> = boundedBellmanFordGradientCast(
-    source = localId == 200,
-    local = mapOf("Criticality" to localId.toDouble()).takeIf { localId == 200 }.orEmpty(),
+    source = environment["source"] as? Boolean == true,
+    local = mapOf("Criticality" to localId.toDouble()).takeIf { environment["source"] as? Boolean == true }.orEmpty(),
     distanceBound = 150.0,
     metric = with(environment) { distances() },
 ).let {
