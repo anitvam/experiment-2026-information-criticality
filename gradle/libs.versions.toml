@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.3.21"
 alchemist = "43.0.47"
-collektive = "28.2.4"
+collektive = "28.2.5"
 guava = "33.6.0-jre"
 
 [libraries]
