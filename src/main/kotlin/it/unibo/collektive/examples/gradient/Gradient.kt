@@ -55,38 +55,37 @@ inline fun <reified ID : Any, reified Value> Aggregate<ID>.boundedBellmanFordGra
     metric = metric,
 )
 
-fun Aggregate<Int>.gradientEntrypoint(environment: CollektiveDevice<*>): Map<String, Double> = boundedBellmanFordGradientCast(
-    source = environment["source"] as? Boolean == true,
-    local = mapOf("Criticality" to localId.toDouble()).takeIf { environment["source"] as? Boolean == true }.orEmpty(),
-    distanceBound = 150.0,
-    metric = with(environment) { distances() },
-).let {
-    when {
-        it.second.isNotEmpty() -> environment["distance"] = it.first
-        environment.get<Any?>("distance") == Unit -> Unit
-        else -> environment.node.removeConcentration(SimpleMolecule("distance"))
+fun Aggregate<Int>.collektiveProgram(environment: CollektiveDevice<*>): Unit {
+    // ==============================================
+    // Propagate Incoming Information Criticality Map
+    // ==============================================
+    boundedBellmanFordGradientCast(
+        source = environment["source"] as? Boolean == true,
+        local = mapOf("Criticality" to localId.toDouble()).takeIf { environment["source"] as? Boolean == true }.orEmpty(),
+        distanceBound = 150.0,
+        metric = with(environment) { distances() },
+    ).let {
+        when {
+            it.second.isNotEmpty() -> environment["distance"] = it.first
+            environment.get<Any?>("distance") == Unit -> Unit
+            else -> environment.node.removeConcentration(SimpleMolecule("distance"))
+        }
     }
-//    environment["shared-contains-value"] = it.second.isNotEmpty()
-    it.second
+
+    // ==========================================================
+    // Propagate Outgoing information when critical event happens
+    // ==========================================================
+    boundedBellmanFordGradientCast(
+        source = environment["event"] as? Double == 1.0,
+        local = mapOf("Information" to localId.toDouble()).takeIf { environment["event"] as? Double == 1.0 }.orEmpty(),
+        distanceBound = 100.0, // Should not be fixed: the propagation is determined on the Outgoing Information Criticality
+        metric = with(environment) { distances() },
+    ).let {
+        when {
+            it.second.isNotEmpty() -> environment["event-distance"] = it.first
+            environment.get<Any?>("event-distance") == Unit -> Unit
+            else -> environment.node.removeConcentration(SimpleMolecule("event-distance"))
+        }
+    }
+
 }
-//fun Aggregate<Int>.gradientEntrypoint(environment: CollektiveDevice<*>): Map<String, Double>  {
-//    val criticalities = mapOf("Criticality" to 100.0)
-//    with(environment) {
-//        val leaderID = 200 //TODO(Take this from alchemist property)
-//        val maxDistanceReachedByCriticality = 150
-//
-//        val srd = share(criticalities) { _ ->
-//            val distance =  distanceTo(localId == leaderID, distances())
-//            environment["distance"] = distance
-//
-//            when (distance < maxDistanceReachedByCriticality) {
-//                true -> criticalities
-//                else -> emptyMap()
-//            }
-//        }
-//        environment["shared"] = srd
-//        environment["shared-contains-value"] = srd.isNotEmpty()
-//
-//        return srd
-//    }
-//}

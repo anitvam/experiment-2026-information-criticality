@@ -9,7 +9,8 @@ _collektive-program: &collektive-program
     type: Event
     actions:
       - type: RunCollektiveProgram
-        parameters: [it.unibo.collektive.examples.gradient.GradientKt.gradientEntrypoint]
+        parameters: [it.unibo.collektive.examples.gradient.GradientKt.collektiveProgram]
+
 
 _random-movement: &random-movement
   - time-distribution: 1
@@ -51,7 +52,7 @@ _circular-movement: &circular-movement
 
 deployments:
   - type: Circle
-    parameters: [2000, 0, 0, 400]
+    parameters: [200, 0, 0, 400]
     programs:
       - *random-movement
       - *collektive-program
