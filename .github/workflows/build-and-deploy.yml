@@ -97,7 +97,7 @@ jobs:
 #          npm install
 #          npx semantic-release
   success:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     needs:
       # - create-charts
       - check-simulations-native
